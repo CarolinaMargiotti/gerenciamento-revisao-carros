@@ -1,0 +1,37 @@
+import database from "../database";
+
+import cliente from "./Cliente";
+import revisao from "./revisao";
+import servico from "./Servico";
+import veiculo from "./veiculo";
+
+servico.hasMany(revisao, {
+    foreignKey: {
+        name: "id",
+        allowNull: false,
+    },
+    sourceKey: "id",
+    onDelete: "restrict",
+    onUpdate: "cascade",
+    hooks: true, //usado para forçar o cascade no onDelete
+});
+
+veiculo.hasMany(cliente, {
+    foreignKey: {
+        name: "numeroPlaca",
+        allowNull: false,
+    },
+    sourceKey: "numeroPlaca",
+    onDelete: "restrict",
+    onUpdate: "cascade",
+    hooks: true, //usado para forçar o cascade no onDelete
+});
+
+database.sync();
+
+export default {
+    cliente: cliente,
+    revisao: revisao,
+    servico: servico,
+    veiculo: veiculo,
+};
