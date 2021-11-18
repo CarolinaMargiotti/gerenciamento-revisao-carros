@@ -16,6 +16,7 @@ router.get("/find", find);
 //localhost:3100/veiculo/remove {"numeroPlaca":"abcd-1234"}
 router.delete("/remove", remove);
 
+//localhost:3100/veiculo/list {"offset":0,"limit":10}
 router.get("/list", list);
 
 router.use((req, res) => {
