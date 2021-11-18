@@ -22,7 +22,7 @@ const revisao: any = Database.define(
                 key: "cpf",
             },
         },
-        placa_veiculo: {
+        numeroPlaca: {
             type: Sequelize.STRING,
             allowNull: false,
             references: {

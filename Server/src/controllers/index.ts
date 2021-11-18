@@ -1,3 +1,7 @@
 import VeiculoController from "./VeiculoController";
+import ClienteController from "./ClienteController";
 
-export default VeiculoController;
+export default {
+    VeiculoController: VeiculoController,
+    ClienteController: ClienteController,
+};

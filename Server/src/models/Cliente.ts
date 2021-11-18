@@ -17,7 +17,7 @@ const cliente: any = Database.define(
             type: Sequelize.STRING,
             allowNull: false,
         },
-        telfone: {
+        telefone: {
             type: Sequelize.INTEGER,
             allowNull: false,
         },

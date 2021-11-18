@@ -10,6 +10,14 @@ const veiculo: any = Database.define(
             primaryKey: true,
             unique: { args: true, msg: "Essa placa ja existe no sistema" },
         },
+        cpf: {
+            type: Sequelize.STRING,
+            allowNull: false,
+            references: {
+                model: "cliente",
+                key: "cpf",
+            },
+        },
         modelo: {
             type: Sequelize.STRING,
             allowNull: false,
