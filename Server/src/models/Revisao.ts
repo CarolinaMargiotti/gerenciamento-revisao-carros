@@ -37,6 +37,10 @@ const revisao: any = Database.define(
         relatorio: {
             type: Sequelize.STRING,
         },
+        servicos: {
+            type: Sequelize.ARRAY(Sequelize.INTEGER),
+            allowNull: false,
+        },
     },
     {
         freezeTableName: true,
