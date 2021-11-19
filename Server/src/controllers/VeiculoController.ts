@@ -1,5 +1,4 @@
 import models from "../models";
-import veiculo from "../models/veiculo";
 const VeiculoModel = models.veiculo;
 const RevisaoModel = models.revisao;
 
@@ -166,7 +165,7 @@ export default class VeiculoController {
         })
             .then((veiculo) => {
                 return res.status(200).json({
-                    vacinas: veiculo.rows.map((item) => item.get()),
+                    veiculos: veiculo.rows.map((item) => item.get()),
                     count: veiculo.count,
                 });
             })

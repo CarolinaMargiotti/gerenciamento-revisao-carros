@@ -16,6 +16,17 @@ servico.hasMany(revisao, {
     hooks: true, //usado para forçar o cascade no onDelete
 });
 
+cliente.hasMany(veiculo, {
+    foreignKey: {
+        name: "cpf",
+        allowNull: false,
+    },
+    sourceKey: "cpf",
+    onDelete: "cascade",
+    onUpdate: "cascade",
+    hooks: true, //usado para forçar o cascade no onDelete
+});
+
 database.sync();
 
 export default {
