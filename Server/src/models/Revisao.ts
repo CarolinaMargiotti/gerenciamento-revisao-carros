@@ -14,7 +14,7 @@ const revisao: any = Database.define(
             type: Sequelize.DATE,
             allowNull: false,
         },
-        cpf_cliente: {
+        cpf: {
             type: Sequelize.STRING,
             allowNull: false,
             refenreces: {

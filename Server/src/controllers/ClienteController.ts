@@ -86,7 +86,7 @@ export default class ClienteController {
             .then(async (cliente) => {
                 if (cliente) {
                     const revisao = await RevisaoModel.findOne({
-                        where: { cpf_cliente: cpf },
+                        where: { cpf: cpf },
                     });
                     if (!revisao) {
                         await cliente.destroy();

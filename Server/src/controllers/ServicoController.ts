@@ -70,16 +70,20 @@ export default class ServicoController {
     async remove(req, res) {
         let { id } = req.body;
         id = (id || "").toString();
+
         if (id === "") {
             return res
                 .status(400)
                 .json({ error: ["Forneça identificação do servico"] });
         }
 
-        return await ServicoModel.findOne({ servicos: { [Op.contains]: [id] } })
+        return await ServicoModel.findOne({ where: { id } })
             .then(async (servico) => {
                 if (servico) {
-                    const revisao = await RevisaoModel.find;
+                    const revisao = await RevisaoModel.findOne({
+                        where: { servicos: { [Op.contains]: [id] } },
+                    });
+
                     if (!revisao) {
                         await servico.destroy();
                         return res.status(200).json({ id });
