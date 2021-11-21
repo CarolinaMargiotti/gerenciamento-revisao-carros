@@ -11,6 +11,9 @@ Front-end
 - React
 - Typescript
 
+# To-do
+- Depois ajeitar direitinho e formatar os dados que vem, esta aceitando cpfs com só 1 caractere e etc, e deixando ter letras.
+
 # Requisitos
 O sistema a ser desenvolvido precisa ter as seguintes funcionalidades:
 - Cadastro completo de clientes com:
