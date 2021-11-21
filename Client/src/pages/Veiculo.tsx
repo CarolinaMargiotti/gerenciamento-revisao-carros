@@ -1,7 +1,7 @@
 import React from "react";
 
 function Veiculo() {
-    return <h2>Veiculo</h2>;
+    return <div>Veiculo</div>;
 }
 
 export default Veiculo;
