@@ -74,7 +74,7 @@ export default class ClienteController {
     }
 
     async remove(req, res) {
-        let { cpf } = req.body;
+        let { cpf } = req.query;
         cpf = (cpf || "").toString();
         if (cpf === "") {
             return res
@@ -151,7 +151,7 @@ export default class ClienteController {
     }
 
     async list(req, res) {
-        let { limit, offset } = req.body;
+        let { limit, offset } = req.query;
         return await ClienteModel.findAndCountAll({
             attributes: ["cpf", "nome", "telefone", "endereco"],
             order: [["nome", "ASC"]],
