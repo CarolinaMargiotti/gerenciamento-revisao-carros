@@ -6,3 +6,7 @@ Back-end
 - Typescript
 - Node.js
 - Postgres
+
+Front-end
+- React
+- Typescript
