@@ -10,8 +10,6 @@ export default class VeiculoController {
 
         numeroPlaca = (numeroPlaca || "").toString().trim();
         modelo = (modelo || "").toString().trim();
-        ano = (ano || "").toString().trim();
-        valor = (valor || "").toString().trim();
         cpf = (cpf || "").toString().trim();
 
         return await VeiculoModel.create({
@@ -40,12 +38,9 @@ export default class VeiculoController {
     }
 
     async update(req, res) {
-        let { numeroPlaca, modelo, ano, valor, cpf } = req.body;
+        let { numeroPlaca, modelo, ano, valor } = req.body;
         numeroPlaca = (numeroPlaca || "").toString();
         modelo = (modelo || "").toString().trim();
-        ano = (ano || "").toString().trim();
-        valor = (valor || "").toString().trim();
-        cpf = (cpf || "").toString().trim();
 
         if (numeroPlaca === "") {
             return res
@@ -56,10 +51,10 @@ export default class VeiculoController {
         return await VeiculoModel.findOne({ where: { numeroPlaca } })
             .then(async (veiculo) => {
                 if (veiculo) {
-                    await veiculo.update({ modelo, ano, valor, cpf });
+                    await veiculo.update({ modelo, ano, valor });
                     return res
                         .status(200)
-                        .json({ numeroPlaca, modelo, ano, valor, cpf });
+                        .json({ numeroPlaca, modelo, ano, valor });
                 }
                 return res
                     .status(400)
@@ -78,7 +73,8 @@ export default class VeiculoController {
     }
 
     async remove(req, res) {
-        let { numeroPlaca } = req.body;
+        let { numeroPlaca } = req.query;
+
         numeroPlaca = (numeroPlaca || "").toString();
         if (numeroPlaca === "") {
             return res
@@ -123,7 +119,7 @@ export default class VeiculoController {
     //MISC
 
     async find(req, res) {
-        let { numeroPlaca } = req.body;
+        let { numeroPlaca } = req.query;
         numeroPlaca = (numeroPlaca || "").toString();
         if (numeroPlaca === "") {
             return res
@@ -156,7 +152,7 @@ export default class VeiculoController {
     }
 
     async list(req, res) {
-        let { limit, offset } = req.body;
+        let { limit, offset } = req.query;
         return await VeiculoModel.findAndCountAll({
             attributes: ["numeroPlaca", "cpf", "modelo", "ano", "valor"],
             order: [["numeroPlaca", "ASC"]],

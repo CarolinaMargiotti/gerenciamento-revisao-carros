@@ -118,7 +118,8 @@ export default class ClienteController {
 
     //MISC
     async find(req, res) {
-        let { cpf } = req.body;
+        let { cpf } = req.query;
+
         cpf = (cpf || "").toString();
         if (cpf === "") {
             return res

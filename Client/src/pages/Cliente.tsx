@@ -15,8 +15,13 @@ import {
 } from "reactstrap";
 
 function Cliente() {
-    const { createCliente, listCliente, removeCliente, updateCliente } =
-        Hooks();
+    const {
+        createCliente,
+        listCliente,
+        removeCliente,
+        updateCliente,
+        findCliente,
+    } = Hooks();
     const [cpf, setCpf] = useState("");
     const [nome, setNome] = useState("");
     const [telefone, setTelefone] = useState("");
@@ -24,6 +29,15 @@ function Cliente() {
     const [offset, setOffset] = useState(0);
     const [limit, setLimit] = useState(12);
     const [clientes, setClientes] = useState([]);
+
+    const [clienteProcurado, setClienteProcurado] = useState({
+        cpf: "",
+        nome: "",
+        telefone: "",
+        endereco: "",
+    });
+    const [cpfProcurar, setCpfProcurar] = useState("");
+    const [mostrar, setMostrar] = useState(false);
 
     const [showModal, setShowModal] = useState(false);
     const [modalDataValores, setModalDataValores] = useState({
@@ -113,50 +127,82 @@ function Cliente() {
         setOffset(newOffset);
     };
 
+    const procurar = async () => {
+        const data = await findCliente(cpfProcurar);
+        if (data) {
+            setClienteProcurado({
+                cpf: data.cpf,
+                nome: data.nome,
+                telefone: data.telefone,
+                endereco: data.endereco,
+            });
+            setMostrar(true);
+        }
+    };
+
+    const limparProcurado = () => {
+        setMostrar(false);
+        setCpfProcurar("");
+        setClienteProcurado({
+            cpf: "",
+            nome: "",
+            telefone: "",
+            endereco: "",
+        });
+    };
+
     return (
         <div>
             <Modal isOpen={showModal}>
                 <ModalHeader>Editar Cliente</ModalHeader>
                 <ModalBody>
-                    <Label>Nome</Label>
-                    <Input
-                        type="text"
-                        value={modalDataValores.nome}
-                        onChange={(e) =>
-                            setModalDataValores({
-                                nome: e.target.value,
-                                cpf: modalDataValores.cpf,
-                                telefone: modalDataValores.telefone,
-                                endereco: modalDataValores.endereco,
-                            })
-                        }
-                    ></Input>
-                    <Label>Telefone</Label>
-                    <Input
-                        type="text"
-                        value={modalDataValores.telefone}
-                        onChange={(e) =>
-                            setModalDataValores({
-                                telefone: e.target.value,
-                                cpf: modalDataValores.cpf,
-                                nome: modalDataValores.nome,
-                                endereco: modalDataValores.endereco,
-                            })
-                        }
-                    ></Input>
-                    <Label>Endereço</Label>
-                    <Input
-                        type="text"
-                        value={modalDataValores.endereco}
-                        onChange={(e) =>
-                            setModalDataValores({
-                                endereco: e.target.value,
-                                cpf: modalDataValores.cpf,
-                                nome: modalDataValores.nome,
-                                telefone: modalDataValores.telefone,
-                            })
-                        }
-                    ></Input>
+                    <Form>
+                        <FormGroup>
+                            <Label>Nome</Label>
+                            <Input
+                                type="text"
+                                value={modalDataValores.nome}
+                                onChange={(e) =>
+                                    setModalDataValores({
+                                        nome: e.target.value,
+                                        cpf: modalDataValores.cpf,
+                                        telefone: modalDataValores.telefone,
+                                        endereco: modalDataValores.endereco,
+                                    })
+                                }
+                            ></Input>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label>Telefone</Label>
+                            <Input
+                                type="text"
+                                value={modalDataValores.telefone}
+                                onChange={(e) =>
+                                    setModalDataValores({
+                                        telefone: e.target.value,
+                                        cpf: modalDataValores.cpf,
+                                        nome: modalDataValores.nome,
+                                        endereco: modalDataValores.endereco,
+                                    })
+                                }
+                            ></Input>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label>Endereço</Label>
+                            <Input
+                                type="text"
+                                value={modalDataValores.endereco}
+                                onChange={(e) =>
+                                    setModalDataValores({
+                                        endereco: e.target.value,
+                                        cpf: modalDataValores.cpf,
+                                        nome: modalDataValores.nome,
+                                        telefone: modalDataValores.telefone,
+                                    })
+                                }
+                            ></Input>
+                        </FormGroup>
+                    </Form>
                 </ModalBody>
                 <ModalFooter>
                     <Button color="primary" onClick={(e) => editar(e)}>
@@ -165,7 +211,10 @@ function Cliente() {
                     <Button onClick={(e) => desativarModal(e)}>Cancelar</Button>
                 </ModalFooter>
             </Modal>
-            <h4 className="mt-3 mb-3">Cliente</h4>
+
+            <h4 className="mt-3 mb-5">Cliente</h4>
+
+            <h5>Cadastro de cliente</h5>
             <Form>
                 <FormGroup>
                     <Label>CPF</Label>
@@ -211,6 +260,7 @@ function Cliente() {
 
                             <div className="col col-auto" />
                             <Button
+                                size="sm"
                                 className="col col-auto"
                                 onClick={() => limpar()}
                             >
@@ -220,6 +270,94 @@ function Cliente() {
                     </Container>
                 </FormGroup>
             </Form>
+
+            <div className="mt-5 mb-5">
+                <h5>Procurar por CPF</h5>
+                <Form className="row">
+                    <div className="col col-auto">
+                        <FormGroup>
+                            <Input
+                                type="text"
+                                value={cpfProcurar}
+                                onChange={(e) => setCpfProcurar(e.target.value)}
+                            ></Input>
+                        </FormGroup>
+                    </div>
+                    <div className="col col-auto">
+                        <FormGroup>
+                            <Container>
+                                <div className="row">
+                                    <Button
+                                        className="col col-auto"
+                                        size="sm"
+                                        onClick={() => procurar()}
+                                    >
+                                        Procurar
+                                    </Button>
+                                    <div className="col col-auto" />
+                                    <Button
+                                        className="col col-auto"
+                                        size="sm"
+                                        onClick={() => limparProcurado()}
+                                    >
+                                        Limpar
+                                    </Button>
+                                </div>
+                            </Container>
+                        </FormGroup>
+                    </div>
+                </Form>
+                {mostrar && (
+                    <Table className="border border-1">
+                        <thead>
+                            <tr>
+                                <th>CPF</th>
+                                <th>Nome</th>
+                                <th>Telefone</th>
+                                <th>Endereço</th>
+                                <th>Editar</th>
+                                <th>Deletar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{clienteProcurado.cpf}</td>
+                                <td>{clienteProcurado.nome}</td>
+                                <td>{clienteProcurado.telefone}</td>
+                                <td>{clienteProcurado.endereco}</td>
+                                <td>
+                                    <Button
+                                        size="sm"
+                                        onClick={(e) =>
+                                            ativarModal(
+                                                e,
+                                                clienteProcurado.cpf,
+                                                clienteProcurado.nome,
+                                                clienteProcurado.telefone,
+                                                clienteProcurado.endereco
+                                            )
+                                        }
+                                    >
+                                        Editar
+                                    </Button>
+                                </td>
+                                <td>
+                                    <Button
+                                        size="sm"
+                                        onClick={(e) =>
+                                            remover(e, clienteProcurado.cpf)
+                                        }
+                                    >
+                                        Deletar
+                                    </Button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </Table>
+                )}
+            </div>
+
+            <h5>Tabela clientes</h5>
             <Table striped className="border border-1 table-hover">
                 <thead>
                     <tr>

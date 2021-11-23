@@ -18,8 +18,69 @@ const Hooks = () => {
                 cpf,
             });
         } catch (e: any) {
+            console.log(e);
+
+            console.log(e.response);
+            alert(e.response.data.error[0]);
+        }
+    };
+
+    const updateVeiculo = async (
+        numeroPlaca: string,
+        modelo: string,
+        ano: number,
+        valor: number
+    ) => {
+        try {
+            await api.put("/veiculo/update", {
+                numeroPlaca,
+                modelo,
+                ano,
+                valor,
+            });
+        } catch (e: any) {
             console.log(e.message);
             alert(e.response.data.error[0]);
+        }
+    };
+
+    const listVeiculo = async (offset: number, limit: number) => {
+        try {
+            const { data } = await api.get("veiculo/list", {
+                params: {
+                    limit,
+                    offset,
+                },
+            });
+            return data.veiculos;
+        } catch (e: any) {
+            console.log(e.message);
+            alert(e.response.data.error[0]);
+        }
+    };
+
+    const removeVeiculo = async (numeroPlaca: string) => {
+        try {
+            await api.delete("/veiculo/remove", {
+                method: "delete",
+                params: {
+                    numeroPlaca,
+                },
+            });
+        } catch (e: any) {
+            console.log(e.message);
+            alert(e.response.data.error[0]);
+        }
+    };
+
+    const findVeiculo = async (numeroPlaca: string) => {
+        try {
+            const data = await (
+                await api.get("veiculo/find", { params: { numeroPlaca } })
+            ).data;
+            return data;
+        } catch (e: any) {
+            console.log(e.message);
         }
     };
 
@@ -92,12 +153,28 @@ const Hooks = () => {
         }
     };
 
+    const findCliente = async (cpf: string) => {
+        try {
+            const data = await (
+                await api.get("cliente/find", { params: { cpf } })
+            ).data;
+            return data;
+        } catch (e: any) {
+            console.log(e.message);
+        }
+    };
+
     return {
         createVeiculo,
+        updateVeiculo,
+        listVeiculo,
+        removeVeiculo,
+        findVeiculo,
         createCliente,
         listCliente,
         removeCliente,
         updateCliente,
+        findCliente,
     };
 };
 
