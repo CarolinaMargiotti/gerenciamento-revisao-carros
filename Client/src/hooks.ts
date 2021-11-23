@@ -164,6 +164,75 @@ const Hooks = () => {
         }
     };
 
+    //Serviço
+
+    const createServico = async (nome: string, descricao: string) => {
+        try {
+            await api.post("/servico/create", {
+                nome,
+                descricao,
+            });
+        } catch (e: any) {
+            console.log(e.message);
+        }
+    };
+
+    const listServico = async (offset: number, limit: number) => {
+        try {
+            const { data } = await api.get("servico/list", {
+                params: {
+                    limit,
+                    offset,
+                },
+            });
+            return data.servicos;
+        } catch (e: any) {
+            console.log(e.message);
+        }
+    };
+
+    const removeServico = async (id: number) => {
+        try {
+            await api.delete("/servico/remove", {
+                method: "delete",
+                params: {
+                    id,
+                },
+            });
+        } catch (e: any) {
+            console.log(e.message);
+            alert(e.response.data.error[0]);
+        }
+    };
+
+    const updateServico = async (
+        id: number,
+        nome: string,
+        descricao: string
+    ) => {
+        try {
+            await api.put("/servico/update", {
+                id,
+                nome,
+                descricao,
+            });
+        } catch (e: any) {
+            console.log(e.message);
+            alert(e.response.data.error[0]);
+        }
+    };
+
+    const findServico = async (id: number) => {
+        try {
+            const data = await (
+                await api.get("servico/find", { params: { id } })
+            ).data;
+            return data;
+        } catch (e: any) {
+            console.log(e.message);
+        }
+    };
+
     return {
         createVeiculo,
         updateVeiculo,
@@ -175,6 +244,11 @@ const Hooks = () => {
         removeCliente,
         updateCliente,
         findCliente,
+        createServico,
+        listServico,
+        removeServico,
+        updateServico,
+        findServico,
     };
 };
 

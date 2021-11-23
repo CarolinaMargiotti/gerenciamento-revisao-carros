@@ -42,6 +42,7 @@ function Veiculo() {
     const [mostrar, setMostrar] = useState(false);
 
     const [offset, setOffset] = useState(0);
+    // eslint-disable-next-line
     const [limit, setLimit] = useState(12);
 
     const [showModal, setShowModal] = useState(false);
@@ -67,7 +68,6 @@ function Veiculo() {
 
     const handle = async (e: any) => {
         e.preventDefault();
-        console.log(valor);
 
         await createVeiculo(numeroPlaca, modelo, ano, valor, cpf);
         retrieveVeiculos();
@@ -126,6 +126,7 @@ function Veiculo() {
     };
 
     const procurar = async () => {
+        limparProcurado();
         const data = await findVeiculo(veiculoProcurar);
         if (data) {
             setVeiculoProcurado({
@@ -136,6 +137,7 @@ function Veiculo() {
                 cpf: data.cpf,
             });
             setMostrar(true);
+            setVeiculoProcurar(veiculoProcurar);
         }
     };
 

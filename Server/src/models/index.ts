@@ -11,7 +11,7 @@ servico.hasMany(revisao, {
         allowNull: false,
     },
     sourceKey: "id",
-    onDelete: "restrict",
+    onDelete: "cascade",
     onUpdate: "cascade",
     hooks: true, //usado para forçar o cascade no onDelete
 });

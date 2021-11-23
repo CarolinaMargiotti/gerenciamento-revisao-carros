@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Hooks from "../hooks";
 import {
     Modal,
@@ -27,6 +27,7 @@ function Cliente() {
     const [telefone, setTelefone] = useState("");
     const [endereco, setEndereco] = useState("");
     const [offset, setOffset] = useState(0);
+    // eslint-disable-next-line
     const [limit, setLimit] = useState(12);
     const [clientes, setClientes] = useState([]);
 
@@ -128,6 +129,7 @@ function Cliente() {
     };
 
     const procurar = async () => {
+        limparProcurado();
         const data = await findCliente(cpfProcurar);
         if (data) {
             setClienteProcurado({
@@ -137,6 +139,7 @@ function Cliente() {
                 endereco: data.endereco,
             });
             setMostrar(true);
+            setCpfProcurar(cpfProcurar);
         }
     };
 

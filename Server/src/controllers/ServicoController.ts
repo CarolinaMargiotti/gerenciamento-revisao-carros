@@ -68,7 +68,7 @@ export default class ServicoController {
     }
 
     async remove(req, res) {
-        let { id } = req.body;
+        let { id } = req.query;
         id = (id || "").toString();
 
         if (id === "") {
@@ -101,6 +101,8 @@ export default class ServicoController {
                 }
             })
             .catch((err) => {
+                console.log(err);
+
                 try {
                     return res.status(400).json({
                         error: err.message,
@@ -114,7 +116,7 @@ export default class ServicoController {
 
     // MISC
     async find(req, res) {
-        let { id } = req.body;
+        let { id } = req.query;
         id = (id || "").toString();
         if (id === "") {
             return res
