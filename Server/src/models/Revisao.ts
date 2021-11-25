@@ -11,7 +11,7 @@ const revisao: any = Database.define(
             primaryKey: true,
         },
         data: {
-            type: Sequelize.DATE,
+            type: Sequelize.STRING,
             allowNull: false,
         },
         cpf: {
@@ -36,6 +36,7 @@ const revisao: any = Database.define(
         },
         relatorio: {
             type: Sequelize.STRING,
+            alllowNull: true,
         },
         servicos: {
             type: Sequelize.ARRAY(Sequelize.INTEGER),

@@ -16,6 +16,17 @@ servico.hasMany(revisao, {
     hooks: true, //usado para forçar o cascade no onDelete
 });
 
+veiculo.hasMany(revisao, {
+    foreignKey: {
+        name: "numeroPlaca",
+        allowNull: false,
+    },
+    sourceKey: "numeroPlaca",
+    onDelete: "cascade",
+    onUpdate: "cascade",
+    hooks: true, //usado para forçar o cascade no onDelete
+});
+
 cliente.hasMany(veiculo, {
     foreignKey: {
         name: "cpf",

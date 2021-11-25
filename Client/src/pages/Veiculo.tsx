@@ -244,6 +244,7 @@ function Veiculo() {
             </Modal>
 
             <h4 className="mt-3 mb-5">Veiculo</h4>
+            <h5>Cadastro de veiculo</h5>
             <Form>
                 <FormGroup>
                     <Label>Numero placa</Label>
@@ -296,6 +297,7 @@ function Veiculo() {
                     <Container>
                         <div className="row">
                             <Button
+                                color="primary"
                                 className="col col-auto"
                                 onClick={(e) => handle(e)}
                                 disabled={hasErrors()}
@@ -408,6 +410,7 @@ function Veiculo() {
                     )}
                 </div>
 
+                <h5>Tabela de veiculos</h5>
                 <Table striped className="border border-1 table-hover">
                     <thead>
                         <tr>

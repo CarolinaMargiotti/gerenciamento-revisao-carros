@@ -2,7 +2,8 @@ import express from "express";
 const router = express.Router();
 import controllers from "../controllers";
 const RevisaoController = controllers.RevisaoController;
-const { create, update, remove, find, list } = new RevisaoController();
+const { create, update, remove, find, findByData, list } =
+    new RevisaoController();
 
 //http://localhost:3100/revisao/create {"data":"2021-05-01","numeroPlaca":"abcd-1234","cpf":"12345678","status":true,"relatorio":"","servicos":[1]}
 router.post("/create", create);
@@ -15,6 +16,8 @@ router.delete("/remove", remove);
 
 //http://localhost:3100/revisao/find {"id":1}
 router.get("/find", find);
+
+router.get("/findByData", findByData);
 
 //http://localhost:3100/revisao/list {"offset":0,"limit":15}
 router.get("/list", list);

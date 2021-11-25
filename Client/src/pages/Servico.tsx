@@ -188,6 +188,7 @@ function Servico() {
             </Modal>
 
             <h4 className="mt-3 mb-5">Serviço</h4>
+            <h5>Cadastro de serviços</h5>
             <Form>
                 <FormGroup>
                     <Label>Nome</Label>
@@ -311,7 +312,7 @@ function Servico() {
                         </Table>
                     )}
                 </div>
-
+                <h5>Tabela de serviços</h5>
                 <Table striped className="border border-1 table-hover">
                     <thead>
                         <tr>

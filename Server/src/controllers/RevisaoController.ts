@@ -3,7 +3,7 @@ const VeiculoModel = models.veiculo;
 const RevisaoModel = models.revisao;
 const revisaoModel = models.revisao;
 const ClienteModel = models.cliente;
-import { Op } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 
 export default class RevisaoController {
     async create(req, res) {
@@ -25,12 +25,12 @@ export default class RevisaoController {
                 .json({ error: ["Forneça uma placa de veiculo"] });
         }
 
-        const veiculo = VeiculoModel.findOne({ where: numeroPlaca });
-        const cliente = ClienteModel.findOne({ where: cpf });
+        const veiculo = VeiculoModel.findOne({ where: { numeroPlaca } });
+        const cliente = ClienteModel.findOne({ where: { cpf } });
 
-        servicos.forEach((servico) => {
+        servicos.forEach((id) => {
             const servicoFound = revisaoModel.findOne({
-                where: { id: servico },
+                where: { id },
             });
 
             if (!servicoFound) {
@@ -87,7 +87,6 @@ export default class RevisaoController {
 
         id = (id || "").toString().trim();
         data = (data || "").toString().trim();
-        servicos = (servicos || "").toString().trim();
 
         if (!id) {
             return res.status(400).json({ error: ["Forneça a identificacao"] });
@@ -130,7 +129,7 @@ export default class RevisaoController {
     }
 
     async remove(req, res) {
-        let { id } = req.body;
+        let { id } = req.query;
         id = (id || "").toString();
         if (id === "") {
             return res
@@ -163,7 +162,7 @@ export default class RevisaoController {
 
     // MISC
     async find(req, res) {
-        let { id } = req.body;
+        let { id } = req.query;
         id = (id || "").toString();
         if (id === "") {
             return res
@@ -175,10 +174,24 @@ export default class RevisaoController {
             .findOne({ where: { id } })
             .then(async (revisao) => {
                 if (revisao) {
-                    let { id, data, status, relatorio, servicos } = revisao;
-                    return res
-                        .status(200)
-                        .json({ id, data, status, relatorio, servicos });
+                    let {
+                        id,
+                        cpf,
+                        numeroPlaca,
+                        data,
+                        status,
+                        relatorio,
+                        servicos,
+                    } = revisao;
+                    return res.status(200).json({
+                        id,
+                        numeroPlaca,
+                        cpf,
+                        data,
+                        status,
+                        relatorio,
+                        servicos,
+                    });
                 }
                 return res
                     .status(400)
@@ -196,18 +209,67 @@ export default class RevisaoController {
             });
     }
 
+    async findByData(req, res) {
+        let { data } = req.query;
+        data = (data || "").toString();
+        if (data === "") {
+            return res.status(400).json({ error: ["Forneça data da revisão"] });
+        }
+
+        return await revisaoModel
+            .findAndCountAll({
+                attributes: [
+                    "id",
+                    "numeroPlaca",
+                    "cpf",
+                    "data",
+                    "status",
+                    "relatorio",
+                    "servicos",
+                ],
+                order: [["id", "ASC"]],
+                where: {
+                    data,
+                },
+            })
+            .then(async (revisao) => {
+                return res.status(200).json({
+                    revisoes: revisao.rows.map((item) => item.get()),
+                    count: revisao.count,
+                });
+            })
+            .catch((err) => {
+                try {
+                    return res.status(400).json({
+                        error: err,
+                        type: "validation",
+                    });
+                } catch (e) {
+                    return res.status(400).json({ error: [e.message] });
+                }
+            });
+    }
+
     async list(req, res) {
         let { limit, offset } = req.body;
         return await revisaoModel
             .findAndCountAll({
-                attributes: ["id", "data", "status", "relatorio", "servicos"],
-                order: [["id", "ASC"]],
+                attributes: [
+                    "id",
+                    "numeroPlaca",
+                    "cpf",
+                    "data",
+                    "status",
+                    "relatorio",
+                    "servicos",
+                ],
+                order: [["data", "ASC"]],
                 offset,
                 limit,
             })
             .then((revisao) => {
                 return res.status(200).json({
-                    Revisoes: revisao.rows.map((item) => item.get()),
+                    revisoes: revisao.rows.map((item) => item.get()),
                     count: revisao.count,
                 });
             })

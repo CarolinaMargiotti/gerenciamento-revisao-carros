@@ -98,7 +98,6 @@ const Hooks = () => {
                 telefone,
                 endereco,
             });
-            alert("sucesso");
         } catch (e: any) {
             console.log(e.message);
             alert(e.response.data.error[0]);
@@ -233,6 +232,101 @@ const Hooks = () => {
         }
     };
 
+    //Revisão
+
+    const createRevisao = async (
+        data: string,
+        numeroPlaca: string,
+        cpf: string,
+        status: boolean,
+        relatorio: string,
+        servicos: Array<number>
+    ) => {
+        try {
+            await api.post("/revisao/create", {
+                data,
+                numeroPlaca,
+                cpf,
+                status,
+                relatorio,
+                servicos,
+            });
+        } catch (e: any) {
+            console.log(e.message);
+        }
+    };
+
+    const listRevisao = async (offset: number, limit: number) => {
+        try {
+            const { data } = await api.get("revisao/list", {
+                params: {
+                    limit,
+                    offset,
+                },
+            });
+            return data.revisoes;
+        } catch (e: any) {
+            console.log(e.message);
+        }
+    };
+
+    const removeRevisao = async (id: number) => {
+        try {
+            await api.delete("/revisao/remove", {
+                method: "delete",
+                params: {
+                    id,
+                },
+            });
+        } catch (e: any) {
+            console.log(e.message);
+            alert(e.response.data.error[0]);
+        }
+    };
+
+    const updateRevisao = async (
+        id: number,
+        data: string,
+        status: boolean,
+        relatorio: string,
+        servicos: Array<number>
+    ) => {
+        try {
+            await api.put("/revisao/update", {
+                id,
+                data,
+                status,
+                relatorio,
+                servicos,
+            });
+        } catch (e: any) {
+            console.log(e.message);
+            alert(e.response.data.error[0]);
+        }
+    };
+
+    const findRevisao = async (id: number) => {
+        try {
+            const data = await (
+                await api.get("revisao/find", { params: { id } })
+            ).data;
+            return data;
+        } catch (e: any) {
+            console.log(e.message);
+        }
+    };
+
+    const findByDataRevisao = async (data: string) => {
+        try {
+            const info = await (
+                await api.get("revisao/findByData", { params: { data } })
+            ).data;
+            return info;
+        } catch (e: any) {
+            console.log(e.message);
+        }
+    };
+
     return {
         createVeiculo,
         updateVeiculo,
@@ -249,6 +343,12 @@ const Hooks = () => {
         removeServico,
         updateServico,
         findServico,
+        createRevisao,
+        updateRevisao,
+        removeRevisao,
+        listRevisao,
+        findRevisao,
+        findByDataRevisao,
     };
 };
 

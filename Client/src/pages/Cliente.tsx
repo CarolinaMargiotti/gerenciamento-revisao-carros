@@ -360,7 +360,7 @@ function Cliente() {
                 )}
             </div>
 
-            <h5>Tabela clientes</h5>
+            <h5>Tabela de clientes</h5>
             <Table striped className="border border-1 table-hover">
                 <thead>
                     <tr>
