@@ -6,10 +6,13 @@ Back-end
 - Typescript
 - Node.js
 - Postgres
+- Sequelize
 
 Front-end
 - React
 - Typescript
+- Reactstrap
+- Bootstrap
 
 # To-do
 - Depois ajeitar direitinho e formatar os dados que vem, esta aceitando cpfs com só 1 caractere e etc, e deixando ter letras.
