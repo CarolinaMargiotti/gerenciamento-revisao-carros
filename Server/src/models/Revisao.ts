@@ -11,7 +11,7 @@ const revisao: any = Database.define(
             primaryKey: true,
         },
         data: {
-            type: Sequelize.TEXT,
+            type: Sequelize.STRING,
             allowNull: false,
         },
         cpf: {
@@ -35,7 +35,7 @@ const revisao: any = Database.define(
             allowNull: false,
         },
         relatorio: {
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT,
             alllowNull: true,
         },
         servicos: {
