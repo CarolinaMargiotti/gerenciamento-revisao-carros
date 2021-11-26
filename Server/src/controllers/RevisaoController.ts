@@ -72,6 +72,8 @@ export default class RevisaoController {
             })
             .catch((err) => {
                 try {
+                    console.log(err.message);
+
                     return res.status(400).json({
                         error: err.message,
                         type: "validation",
@@ -118,6 +120,8 @@ export default class RevisaoController {
             })
             .catch((err) => {
                 try {
+                    console.log(err);
+
                     return res.status(400).json({
                         error: err.errors.map((item) => item.message),
                         type: "validation",

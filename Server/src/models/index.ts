@@ -5,16 +5,16 @@ import revisao from "./revisao";
 import servico from "./Servico";
 import veiculo from "./veiculo";
 
-servico.hasMany(revisao, {
-    foreignKey: {
-        name: "id",
-        allowNull: false,
-    },
-    sourceKey: "id",
-    onDelete: "cascade",
-    onUpdate: "cascade",
-    hooks: true, //usado para forçar o cascade no onDelete
-});
+// servico.hasMany(revisao, {
+//     foreignKey: {
+//         name: "id",
+//         allowNull: false,
+//     },
+//     sourceKey: "id",
+//     onDelete: "cascade",
+//     onUpdate: "cascade",
+//     hooks: true, //usado para forçar o cascade no onDelete
+// });
 
 veiculo.hasMany(revisao, {
     foreignKey: {

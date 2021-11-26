@@ -292,6 +292,10 @@ function Servico() {
         setOffset(newOffset);
     };
 
+    const formatServicos = (value: Array<number>) => {
+        return value.toString();
+    };
+
     const checkCPF = async () => {
         const res = await findCliente(cpf);
 
@@ -401,7 +405,7 @@ function Servico() {
                                 {modalDataValores.servicos.length >= 1 &&
                                     modalDataValores.servicos.map(
                                         (item: any, index) => (
-                                            <ListGroupItem>
+                                            <ListGroupItem className="bg-primary text-white">
                                                 {item.nome}
                                             </ListGroupItem>
                                         )
@@ -803,7 +807,7 @@ function Servico() {
                                         {item.status ? "Agendado" : "Cancelado"}
                                     </td>
                                     <td>{item.relatorio}</td>
-                                    <td>{item.servicos}</td>
+                                    <td>{formatServicos(item.servicos)}</td>
                                     <td>
                                         <Button
                                             size="sm"
