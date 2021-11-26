@@ -26,16 +26,25 @@ function Veiculo() {
     const [numeroPlaca, setNumeroPlaca] = useState("");
     const [modelo, setModelo] = useState("");
     const [ano, setAno] = useState(2021);
-    const [valor, setValor] = useState(0.0);
+    const [valor, setValor] = useState("0");
     const [cpf, setCpf] = useState("");
     const [veiculos, setVeiculos] = useState([]);
+
     const [cpfErro, setCpfErro] = useState(true);
+    const [valorErro, setValorErro] = useState(true);
+    const [modeloErro, setModeloErro] = useState(true);
+    const [anoErro, setAnoErro] = useState(false);
+    const [numeroPlacaErro, setNumeroPlacaErro] = useState(true);
+
+    const [valorEditErro, setEditValorErro] = useState(false);
+    const [modeloEditErro, setEditModeloErro] = useState(false);
+    const [anoEditErro, setEditAnoErro] = useState(false);
 
     const [veiculoProcurado, setVeiculoProcurado] = useState({
         numeroPlaca: "",
         modelo: "",
         ano: 2021,
-        valor: 0.0,
+        valor: "0",
         cpf: "",
     });
     const [veiculoProcurar, setVeiculoProcurar] = useState("");
@@ -50,7 +59,7 @@ function Veiculo() {
         numeroPlaca: "",
         modelo: "",
         ano: 2021,
-        valor: 0.0,
+        valor: "0",
     });
 
     useEffect(() => {
@@ -93,8 +102,13 @@ function Veiculo() {
         setNumeroPlaca("");
         setModelo("");
         setAno(2021);
-        setValor(0);
+        setValor("0");
         setCpf("");
+        checkNumeroPlaca();
+        checkModelo();
+        checkAno();
+        checkValor();
+        checkCPF();
     };
 
     const ativarModal = (
@@ -102,7 +116,7 @@ function Veiculo() {
         numeroPlaca: string,
         modelo: string,
         ano: number,
-        valor: number
+        valor: string
     ) => {
         e.preventDefault();
         setModalDataValores({
@@ -121,7 +135,7 @@ function Veiculo() {
             numeroPlaca: "",
             modelo: "",
             ano: 2021,
-            valor: 0,
+            valor: "0",
         });
     };
 
@@ -148,19 +162,9 @@ function Veiculo() {
             numeroPlaca: "",
             modelo: "",
             ano: 2021,
-            valor: 0,
+            valor: "0",
             cpf: "",
         });
-    };
-
-    const verificarCPF = async () => {
-        const res = await findCliente(cpf);
-
-        if (!res) {
-            setCpfErro(true);
-            return;
-        }
-        setCpfErro(false);
     };
 
     const anterior = (e: any) => {
@@ -175,8 +179,48 @@ function Veiculo() {
         setOffset(newOffset);
     };
 
+    const checkCPF = async () => {
+        const res = await findCliente(cpf);
+
+        if (!res) {
+            setCpfErro(true);
+            return;
+        }
+        setCpfErro(false);
+    };
+
+    const checkValor = () => {
+        const va = Number(valor);
+        setValorErro(isNaN(va));
+    };
+
+    const checkNumeroPlaca = () => {
+        setNumeroPlacaErro(numeroPlaca.length !== 8);
+    };
+
+    const checkModelo = () => {
+        setModeloErro(modelo.length === 0);
+    };
+
+    const checkAno = () => {
+        setAnoErro(ano <= 1500);
+    };
+
+    const checkEditValor = () => {
+        const va = Number(modalDataValores.valor);
+        setEditValorErro(isNaN(va));
+    };
+
+    const checkEditModelo = () => {
+        setEditModeloErro(modalDataValores.modelo.length !== 0);
+    };
+
+    const checkEditAno = () => {
+        setEditAnoErro(modalDataValores.ano <= 1500);
+    };
+
     function hasErrors() {
-        return cpfErro;
+        return cpfErro || valorErro || numeroPlacaErro || modeloErro || anoErro;
     }
 
     return (
@@ -199,12 +243,15 @@ function Veiculo() {
                                         valor: modalDataValores.valor,
                                     })
                                 }
+                                onBlur={() => checkEditModelo()}
+                                valid={modeloEditErro}
+                                invalid={!modeloEditErro}
                             ></Input>
                         </FormGroup>
                         <FormGroup>
                             <Label>Ano</Label>
                             <Input
-                                type="text"
+                                type="number"
                                 value={modalDataValores.ano}
                                 onChange={(e) =>
                                     setModalDataValores({
@@ -215,6 +262,9 @@ function Veiculo() {
                                         valor: modalDataValores.valor,
                                     })
                                 }
+                                onBlur={() => checkEditAno()}
+                                valid={!anoEditErro}
+                                invalid={anoEditErro}
                             ></Input>
                         </FormGroup>
                         <FormGroup>
@@ -228,15 +278,22 @@ function Veiculo() {
                                             modalDataValores.numeroPlaca,
                                         modelo: modalDataValores.modelo,
                                         ano: modalDataValores.ano,
-                                        valor: +e.target.value,
+                                        valor: e.target.value,
                                     })
                                 }
+                                onBlur={() => checkEditValor()}
+                                valid={!valorEditErro}
+                                invalid={valorEditErro}
                             ></Input>
                         </FormGroup>
                     </Form>
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="primary" onClick={(e) => editar(e)}>
+                    <Button
+                        color="primary"
+                        onClick={(e) => editar(e)}
+                        disabled={valorEditErro}
+                    >
                         Editar
                     </Button>
                     <Button onClick={(e) => desativarModal(e)}>Cancelar</Button>
@@ -252,7 +309,18 @@ function Veiculo() {
                         type="text"
                         value={numeroPlaca}
                         onChange={(e) => setNumeroPlaca(e.target.value)}
+                        onBlur={() => checkNumeroPlaca()}
+                        invalid={numeroPlacaErro}
+                        valid={!numeroPlacaErro}
                     ></Input>
+                    <small
+                        className="text-danger"
+                        style={{
+                            visibility: numeroPlacaErro ? "visible" : "hidden",
+                        }}
+                    >
+                        Numero de placa invalido.
+                    </small>
                 </FormGroup>
                 <FormGroup>
                     <Label>Modelo</Label>
@@ -260,14 +328,20 @@ function Veiculo() {
                         type="text"
                         value={modelo}
                         onChange={(e) => setModelo(e.target.value)}
+                        onBlur={() => checkModelo()}
+                        valid={!modeloErro}
+                        invalid={modeloErro}
                     ></Input>
                 </FormGroup>
                 <FormGroup>
                     <Label>Ano</Label>
                     <Input
-                        type="text"
+                        type="number"
                         value={ano}
                         onChange={(e) => setAno(+e.target.value)}
+                        onBlur={() => checkAno()}
+                        valid={!anoErro}
+                        invalid={anoErro}
                     ></Input>
                 </FormGroup>
                 <FormGroup>
@@ -275,7 +349,10 @@ function Veiculo() {
                     <Input
                         type="text"
                         value={valor}
-                        onChange={(e) => setValor(+e.target.value)}
+                        onChange={(e) => setValor(e.target.value)}
+                        onBlur={() => checkValor()}
+                        valid={!valorErro}
+                        invalid={valorErro}
                     ></Input>
                 </FormGroup>
                 <FormGroup>
@@ -284,7 +361,9 @@ function Veiculo() {
                         type="text"
                         value={cpf}
                         onChange={(e) => setCpf(e.target.value)}
-                        onBlur={() => verificarCPF()}
+                        onBlur={() => checkCPF()}
+                        valid={!cpfErro}
+                        invalid={cpfErro}
                     ></Input>
                     <small
                         style={{ visibility: cpfErro ? "visible" : "hidden" }}
@@ -356,8 +435,8 @@ function Veiculo() {
                         </div>
                     </Form>
                     {mostrar && (
-                        <Table className="border border-1">
-                            <thead>
+                        <Table className="border border-1 border-dark">
+                            <thead className="bg-primary text-white">
                                 <tr>
                                     <th>Numero da Placa</th>
                                     <th>CPF</th>
@@ -411,8 +490,11 @@ function Veiculo() {
                 </div>
 
                 <h5>Tabela de veiculos</h5>
-                <Table striped className="border border-1 table-hover">
-                    <thead>
+                <Table
+                    striped
+                    className="border border-1 border-dark table-hover"
+                >
+                    <thead className="bg-primary text-white">
                         <tr>
                             <th>Numero da Placa</th>
                             <th>CPF</th>
@@ -466,7 +548,7 @@ function Veiculo() {
 
             <FormGroup>
                 <Container>
-                    <div className="row">
+                    <div className="row pb-3">
                         <Button
                             className="col col-auto"
                             size="sm"

@@ -9,9 +9,9 @@ import Menu from "./pages/Menu";
 
 function App() {
     return (
-        <div className="App">
+        <div>
             <BrowserRouter>
-                <Container>
+                <Container className="bg-light">
                     <Menu />
                     <Routes>
                         <Route path="/veiculo" element={<Veiculo />} />

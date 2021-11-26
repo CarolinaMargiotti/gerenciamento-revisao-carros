@@ -6,7 +6,7 @@ const Hooks = () => {
         numeroPlaca: string,
         modelo: string,
         ano: number,
-        valor: number,
+        valor: string,
         cpf: string
     ) => {
         try {
@@ -29,7 +29,7 @@ const Hooks = () => {
         numeroPlaca: string,
         modelo: string,
         ano: number,
-        valor: number
+        valor: string
     ) => {
         try {
             await api.put("/veiculo/update", {

@@ -3,9 +3,9 @@ import { Nav, NavItem, NavbarBrand, NavLink } from "reactstrap";
 
 function Menu() {
     return (
-        <Nav>
-            <NavbarBrand>
-                <h4>Administração de veiculos</h4>
+        <Nav className="border-bottom border-primary border-3 align-items-center">
+            <NavbarBrand className="m-2">
+                <h4 style={{ userSelect: "none" }}>Revisão de veiculos</h4>
             </NavbarBrand>
             <NavItem>
                 <NavLink href="/cliente">Cliente</NavLink>

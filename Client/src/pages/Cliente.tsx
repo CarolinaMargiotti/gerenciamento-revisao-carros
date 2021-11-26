@@ -27,6 +27,14 @@ function Cliente() {
     const [telefone, setTelefone] = useState("");
     const [endereco, setEndereco] = useState("");
     const [offset, setOffset] = useState(0);
+    const [cpfErro, setCpfErro] = useState(true);
+    const [telErro, setTelErro] = useState(true);
+    const [nomeErro, setNomeErro] = useState(true);
+    const [enderecoErro, setEnderecoErro] = useState(true);
+
+    const [editNomeErro, setEditNomeErro] = useState(false);
+    const [editEnderecoErro, setEditEnderecoErro] = useState(false);
+    const [editTelErro, setEditTelErro] = useState(false);
     // eslint-disable-next-line
     const [limit, setLimit] = useState(12);
     const [clientes, setClientes] = useState([]);
@@ -72,6 +80,10 @@ function Cliente() {
         setTelefone("");
         setCpf("");
         setEndereco("");
+        checkCPF();
+        checkEndereco();
+        checkNome();
+        checkTel();
     };
 
     const remover = async (e: any, cpf: string) => {
@@ -154,6 +166,32 @@ function Cliente() {
         });
     };
 
+    const checkCPF = () => {
+        setCpfErro(cpf.length === 11);
+    };
+
+    const checkTel = () => {
+        setTelErro(telefone.length === 10);
+    };
+    const checkNome = () => {
+        setNomeErro(nome.length === 0);
+    };
+
+    const checkEndereco = () => {
+        setEnderecoErro(endereco.length === 0);
+    };
+
+    const checkEditNome = () => {
+        setEditNomeErro(modalDataValores.nome.length === 0);
+    };
+
+    const checkEditTel = () => {
+        setEditTelErro(modalDataValores.telefone.length === 10);
+    };
+    const checkEditEndereco = () => {
+        setEditEnderecoErro(modalDataValores.endereco.length === 10);
+    };
+
     return (
         <div>
             <Modal isOpen={showModal}>
@@ -173,12 +211,15 @@ function Cliente() {
                                         endereco: modalDataValores.endereco,
                                     })
                                 }
+                                onBlur={() => checkEditNome()}
+                                valid={!editNomeErro}
+                                invalid={editNomeErro}
                             ></Input>
                         </FormGroup>
                         <FormGroup>
                             <Label>Telefone</Label>
                             <Input
-                                type="text"
+                                type="number"
                                 value={modalDataValores.telefone}
                                 onChange={(e) =>
                                     setModalDataValores({
@@ -188,7 +229,20 @@ function Cliente() {
                                         endereco: modalDataValores.endereco,
                                     })
                                 }
+                                onBlur={() => checkEditTel()}
+                                valid={!editTelErro}
+                                invalid={editTelErro}
                             ></Input>
+                            <small
+                                style={{
+                                    visibility: editTelErro
+                                        ? "visible"
+                                        : "hidden",
+                                }}
+                                className="text-danger"
+                            >
+                                Telefone invalido, muito curto.
+                            </small>
                         </FormGroup>
                         <FormGroup>
                             <Label>Endereço</Label>
@@ -203,12 +257,21 @@ function Cliente() {
                                         telefone: modalDataValores.telefone,
                                     })
                                 }
+                                onBlur={() => checkEditEndereco()}
+                                invalid={editEnderecoErro}
+                                valid={!editEnderecoErro}
                             ></Input>
                         </FormGroup>
                     </Form>
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="primary" onClick={(e) => editar(e)}>
+                    <Button
+                        color="primary"
+                        onClick={(e) => editar(e)}
+                        disabled={
+                            editTelErro || editNomeErro || editEnderecoErro
+                        }
+                    >
                         Editar
                     </Button>
                     <Button onClick={(e) => desativarModal(e)}>Cancelar</Button>
@@ -222,10 +285,21 @@ function Cliente() {
                 <FormGroup>
                     <Label>CPF</Label>
                     <Input
-                        type="text"
+                        type="number"
                         value={cpf}
                         onChange={(e) => setCpf(e.target.value)}
+                        onBlur={() => checkCPF()}
+                        valid={cpfErro}
+                        invalid={!cpfErro}
                     />
+                    <small
+                        style={{
+                            visibility: !cpfErro ? "visible" : "hidden",
+                        }}
+                        className="text-danger"
+                    >
+                        CPF invalido, muito curto.
+                    </small>
                 </FormGroup>
                 <FormGroup>
                     <Label>Nome</Label>
@@ -233,15 +307,29 @@ function Cliente() {
                         type="text"
                         value={nome}
                         onChange={(e) => setNome(e.target.value)}
+                        onBlur={() => checkNome()}
+                        valid={!nomeErro}
+                        invalid={nomeErro}
                     />
                 </FormGroup>
                 <FormGroup>
                     <Label>Telefone</Label>
                     <Input
-                        type="text"
+                        type="number"
                         value={telefone}
                         onChange={(e) => setTelefone(e.target.value)}
+                        onBlur={() => checkTel()}
+                        valid={telErro}
+                        invalid={!telErro}
                     />
+                    <small
+                        style={{
+                            visibility: !telErro ? "visible" : "hidden",
+                        }}
+                        className="text-danger"
+                    >
+                        Telefone invalido, muito curto.
+                    </small>
                 </FormGroup>
                 <FormGroup>
                     <Label>Endereço</Label>
@@ -249,14 +337,23 @@ function Cliente() {
                         type="text"
                         value={endereco}
                         onChange={(e) => setEndereco(e.target.value)}
+                        onBlur={() => checkEndereco()}
+                        valid={!enderecoErro}
+                        invalid={enderecoErro}
                     />
                 </FormGroup>
                 <FormGroup>
                     <Container>
                         <div className="row">
                             <Button
-                                className="col col-auto"
+                                className="col col-auto bg-primary border-primary"
                                 onClick={(e) => handle(e)}
+                                disabled={
+                                    cpfErro ||
+                                    telErro ||
+                                    nomeErro ||
+                                    enderecoErro
+                                }
                             >
                                 Criar
                             </Button>
@@ -311,8 +408,8 @@ function Cliente() {
                     </div>
                 </Form>
                 {mostrar && (
-                    <Table className="border border-1">
-                        <thead>
+                    <Table className="border border-1 border-dark">
+                        <thead className="bg-primary text-white">
                             <tr>
                                 <th>CPF</th>
                                 <th>Nome</th>
@@ -361,8 +458,8 @@ function Cliente() {
             </div>
 
             <h5>Tabela de clientes</h5>
-            <Table striped className="border border-1 table-hover">
-                <thead>
+            <Table striped className="border border-1 border-dark table-hover">
+                <thead className="bg-primary text-white">
                     <tr>
                         <th>CPF</th>
                         <th>Nome</th>
@@ -410,7 +507,7 @@ function Cliente() {
             </Table>
             <FormGroup>
                 <Container>
-                    <div className="row">
+                    <div className="row pb-3">
                         <Button
                             className="col col-auto"
                             size="sm"

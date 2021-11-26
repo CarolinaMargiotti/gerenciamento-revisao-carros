@@ -267,8 +267,8 @@ function Servico() {
                         </div>
                     </Form>
                     {mostrar && (
-                        <Table className="border border-1">
-                            <thead>
+                        <Table className="border border-dark border-1">
+                            <thead className="bg-primary text-white">
                                 <tr>
                                     <th>ID</th>
                                     <th>Nome</th>
@@ -313,8 +313,11 @@ function Servico() {
                     )}
                 </div>
                 <h5>Tabela de serviços</h5>
-                <Table striped className="border border-1 table-hover">
-                    <thead>
+                <Table
+                    striped
+                    className="border border-dark border-1 table-hover"
+                >
+                    <thead className="bg-primary text-white">
                         <tr>
                             <th>ID</th>
                             <th>Nome</th>
@@ -361,7 +364,7 @@ function Servico() {
 
             <FormGroup>
                 <Container>
-                    <div className="row">
+                    <div className="row pb-3">
                         <Button
                             className="col col-auto"
                             size="sm"
