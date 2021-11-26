@@ -35,3 +35,10 @@ O sistema a ser desenvolvido precisa ter as seguintes funcionalidades:
 veículo.
 - Capacidade de persistência de dados. A base de informações do sistema deverá
 ser salva em um banco de dados relacional.
+
+# Como Executar
+- Abrir separadamente os projetos Server e Cliente.
+- Em cada um deles executar comando `npm i` para instalar dependencias.
+- No server executar com comando `npm run dev`.
+- Cliente executar com comando `npm start`.
+- Esperar react abrir a pagina e pronto!
