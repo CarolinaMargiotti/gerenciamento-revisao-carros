@@ -25,6 +25,8 @@ function Servico() {
         findRevisao,
         listServico,
         findByDataRevisao,
+        findCliente,
+        findVeiculo,
     } = Hooks();
     const [revisoes, setRevisoes] = useState([]);
     const [data, setData] = useState("");
@@ -35,6 +37,13 @@ function Servico() {
     const [servicos, setServicos] = useState<
         Array<{ id: number; nome: string }>
     >([]);
+
+    const [cpfErro, setCpfErro] = useState(true);
+    const [numeroPlacaErro, setNumeroPlacaErro] = useState(true);
+    const [dataErro, setDataErro] = useState(true);
+
+    const [editDataErro, setEditDataErro] = useState(false);
+
     const [servicosPselecionar, setServicosPselecionar] = useState([]);
 
     const [revisaoProcurado, setRevisaoProcurado] = useState<{
@@ -283,6 +292,35 @@ function Servico() {
         setOffset(newOffset);
     };
 
+    const checkCPF = async () => {
+        const res = await findCliente(cpf);
+
+        if (!res) {
+            setCpfErro(true);
+            return;
+        }
+
+        setCpfErro(false);
+    };
+
+    const checkNumeroPlaca = async () => {
+        const res = await findVeiculo(numeroPlaca);
+
+        if (!res) {
+            setNumeroPlacaErro(true);
+            return;
+        }
+        setNumeroPlacaErro(false);
+    };
+
+    const checkDataErro = async () => {
+        setDataErro(data.length === 0);
+    };
+
+    const checkEditDataErro = () => {
+        setEditDataErro(modalDataValores.data.length === 0);
+    };
+
     return (
         <div>
             <Modal isOpen={showModal}>
@@ -303,6 +341,9 @@ function Servico() {
                                         servicos: modalDataValores.servicos,
                                     })
                                 }
+                                onBlur={() => checkEditDataErro()}
+                                valid={!editDataErro}
+                                invalid={editDataErro}
                             ></Input>
                         </FormGroup>
                         <FormGroup>
@@ -394,7 +435,11 @@ function Servico() {
                     </Form>
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="primary" onClick={(e) => editar(e)}>
+                    <Button
+                        color="primary"
+                        onClick={(e) => editar(e)}
+                        disabled={editDataErro}
+                    >
                         Editar
                     </Button>
                     <Button onClick={(e) => desativarModal(e)}>Cancelar</Button>
@@ -410,7 +455,18 @@ function Servico() {
                         type="text"
                         value={numeroPlaca}
                         onChange={(e) => setNumeroPlaca(e.target.value)}
+                        onBlur={() => checkNumeroPlaca()}
+                        valid={!numeroPlacaErro}
+                        invalid={numeroPlacaErro}
                     ></Input>
+                    <small
+                        className="text-danger"
+                        style={{
+                            visibility: numeroPlacaErro ? "visible" : "hidden",
+                        }}
+                    >
+                        Placa não registrada.
+                    </small>
                 </FormGroup>
                 <FormGroup>
                     <Label>CPF</Label>
@@ -418,7 +474,18 @@ function Servico() {
                         type="text"
                         value={cpf}
                         onChange={(e) => setCPF(e.target.value)}
+                        onBlur={() => checkCPF()}
+                        valid={!cpfErro}
+                        invalid={cpfErro}
                     ></Input>
+                    <small
+                        className="text-danger"
+                        style={{
+                            visibility: cpfErro ? "visible" : "hidden",
+                        }}
+                    >
+                        Cliente não registrado.
+                    </small>
                 </FormGroup>
                 <FormGroup>
                     <Label>Data</Label>
@@ -426,6 +493,9 @@ function Servico() {
                         type="date"
                         value={data}
                         onChange={(e) => setData(e.target.value)}
+                        onBlur={() => checkDataErro()}
+                        valid={!dataErro}
+                        invalid={dataErro}
                     ></Input>
                 </FormGroup>
                 <FormGroup>
@@ -445,7 +515,9 @@ function Servico() {
                     <ListGroup>
                         {servicos.length >= 1 &&
                             servicos.map((item: any, index) => (
-                                <ListGroupItem>{item.nome}</ListGroupItem>
+                                <ListGroupItem className="bg-primary text-white">
+                                    {item.nome}
+                                </ListGroupItem>
                             ))}
                     </ListGroup>
                     <br />
@@ -473,6 +545,9 @@ function Servico() {
                                 className="col col-auto"
                                 color="primary"
                                 onClick={(e) => handle(e)}
+                                disabled={
+                                    numeroPlacaErro || cpfErro || dataErro
+                                }
                             >
                                 Criar
                             </Button>

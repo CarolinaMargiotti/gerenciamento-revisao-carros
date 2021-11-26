@@ -186,6 +186,7 @@ function Veiculo() {
             setCpfErro(true);
             return;
         }
+
         setCpfErro(false);
     };
 

@@ -26,6 +26,12 @@ function Servico() {
     const [descricao, setDescricao] = useState("");
     const [servicos, setServicos] = useState([]);
 
+    const [nomeErro, setNomeErro] = useState(true);
+    const [descricaoErro, setDescricaoErro] = useState(true);
+
+    const [editNomeErro, setEditNomeErro] = useState(false);
+    const [editDescricaoErro, setEditDescricaoErro] = useState(false);
+
     const [servicoProcurado, setServicoProcurado] = useState({
         id: 0,
         nome: "",
@@ -143,6 +149,22 @@ function Servico() {
         setOffset(newOffset);
     };
 
+    const checkNome = () => {
+        setNomeErro(nome.length === 0);
+    };
+
+    const checkDescricao = () => {
+        setDescricaoErro(descricao.length === 0);
+    };
+
+    const checkEditNome = () => {
+        setEditNomeErro(modalDataValores.nome.length === 0);
+    };
+
+    const checkEditDescricao = () => {
+        setEditDescricaoErro(modalDataValores.descricao.length === 0);
+    };
+
     return (
         <div>
             <Modal isOpen={showModal}>
@@ -161,6 +183,9 @@ function Servico() {
                                         descricao: modalDataValores.descricao,
                                     })
                                 }
+                                onBlur={() => checkEditNome()}
+                                valid={!editNomeErro}
+                                invalid={editNomeErro}
                             ></Input>
                         </FormGroup>
                         <FormGroup>
@@ -175,12 +200,19 @@ function Servico() {
                                         descricao: e.target.value,
                                     })
                                 }
+                                onBlur={() => checkEditDescricao()}
+                                valid={!editDescricaoErro}
+                                invalid={editDescricaoErro}
                             ></Input>
                         </FormGroup>
                     </Form>
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="primary" onClick={(e) => editar(e)}>
+                    <Button
+                        color="primary"
+                        onClick={(e) => editar(e)}
+                        disabled={editNomeErro || editDescricaoErro}
+                    >
                         Editar
                     </Button>
                     <Button onClick={(e) => desativarModal(e)}>Cancelar</Button>
@@ -196,6 +228,9 @@ function Servico() {
                         type="text"
                         value={nome}
                         onChange={(e) => setNome(e.target.value)}
+                        onBlur={() => checkNome()}
+                        valid={!nomeErro}
+                        invalid={nomeErro}
                     ></Input>
                 </FormGroup>
                 <FormGroup>
@@ -204,6 +239,9 @@ function Servico() {
                         type="text"
                         value={descricao}
                         onChange={(e) => setDescricao(e.target.value)}
+                        onBlur={() => checkDescricao()}
+                        valid={!descricaoErro}
+                        invalid={descricaoErro}
                     ></Input>
                 </FormGroup>
                 <FormGroup>
@@ -212,6 +250,7 @@ function Servico() {
                             <Button
                                 className="col col-auto"
                                 onClick={(e) => handle(e)}
+                                disabled={nomeErro || descricaoErro}
                             >
                                 Criar
                             </Button>

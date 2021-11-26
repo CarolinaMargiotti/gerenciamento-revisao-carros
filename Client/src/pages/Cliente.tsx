@@ -167,11 +167,11 @@ function Cliente() {
     };
 
     const checkCPF = () => {
-        setCpfErro(cpf.length === 11);
+        setCpfErro(cpf.length !== 11);
     };
 
     const checkTel = () => {
-        setTelErro(telefone.length === 10);
+        setTelErro(telefone.length !== 11);
     };
     const checkNome = () => {
         setNomeErro(nome.length === 0);
@@ -186,10 +186,10 @@ function Cliente() {
     };
 
     const checkEditTel = () => {
-        setEditTelErro(modalDataValores.telefone.length === 10);
+        setEditTelErro(modalDataValores.telefone.length !== 11);
     };
     const checkEditEndereco = () => {
-        setEditEnderecoErro(modalDataValores.endereco.length === 10);
+        setEditEnderecoErro(modalDataValores.endereco.length === 0);
     };
 
     return (
@@ -289,12 +289,12 @@ function Cliente() {
                         value={cpf}
                         onChange={(e) => setCpf(e.target.value)}
                         onBlur={() => checkCPF()}
-                        valid={cpfErro}
-                        invalid={!cpfErro}
+                        valid={!cpfErro}
+                        invalid={cpfErro}
                     />
                     <small
                         style={{
-                            visibility: !cpfErro ? "visible" : "hidden",
+                            visibility: cpfErro ? "visible" : "hidden",
                         }}
                         className="text-danger"
                     >
@@ -319,12 +319,12 @@ function Cliente() {
                         value={telefone}
                         onChange={(e) => setTelefone(e.target.value)}
                         onBlur={() => checkTel()}
-                        valid={telErro}
-                        invalid={!telErro}
+                        valid={!telErro}
+                        invalid={telErro}
                     />
                     <small
                         style={{
-                            visibility: !telErro ? "visible" : "hidden",
+                            visibility: telErro ? "visible" : "hidden",
                         }}
                         className="text-danger"
                     >

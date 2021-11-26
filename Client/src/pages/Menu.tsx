@@ -5,7 +5,9 @@ function Menu() {
     return (
         <Nav className="border-bottom border-primary border-3 align-items-center">
             <NavbarBrand className="m-2">
-                <h4 style={{ userSelect: "none" }}>Revisão de veiculos</h4>
+                <NavLink href="/">
+                    <h4 style={{ userSelect: "none" }}>Revisão de veiculos</h4>
+                </NavLink>
             </NavbarBrand>
             <NavItem>
                 <NavLink href="/cliente">Cliente</NavLink>
@@ -14,10 +16,10 @@ function Menu() {
                 <NavLink href="/veiculo">Veiculo</NavLink>
             </NavItem>
             <NavItem>
-                <NavLink href="/revisao">Revisao</NavLink>
+                <NavLink href="/revisao">Revisão</NavLink>
             </NavItem>
             <NavItem>
-                <NavLink href="/servico">Servico</NavLink>
+                <NavLink href="/servico">Serviço</NavLink>
             </NavItem>
         </Nav>
     );
