@@ -16,7 +16,6 @@ Front-end
 
 # To-do
 - Depois ajeitar direitinho e formatar os dados que vem, esta aceitando cpfs com só 1 caractere e etc, e deixando ter letras.
-- Veiculos não esta deixando valores float só int.
 
 # Requisitos
 O sistema a ser desenvolvido precisa ter as seguintes funcionalidades:
