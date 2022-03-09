@@ -1,5 +1,4 @@
-# l-2
-Sistema de gerenciamento de revisão de carros.
+# Sistema de gerenciamento de revisão de carros.
 
 # Ferramentas
 Back-end 
